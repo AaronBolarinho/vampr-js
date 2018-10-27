@@ -49,17 +49,47 @@ class Vampire {
 
   // Returns the vampire object with that name, or null if no vampire exists with that name
   vampireWithName(name) {
-    
+    if (name === undefined) {
+      return null
+    } else {
+      return name
+    }
   }
 
   // Returns the total number of vampires that exist
   get totalDescendents() {
-    
+
+    let totalDescendents = 0; // 1
+
+    if (this.offspring.length > 0) {
+      totalDescendents += (this.offspring.length); // 2
+    }
+
+    for (const offsprings of this.offspring) {
+      const offspringNum = offsprings.offspring.length; // 3
+      totalDescendents += offspringNum;
+    }
+
+    return totalDescendents;
+
   }
 
   // Returns an array of all the vampires that were converted after 1980
   get allMillennialVampires() {
-    
+
+    let milVamps = []; // 1
+
+    if (this.yearConverted > 1979) {
+      milVamps.push(this); // 2
+    }
+
+    for (const offsprings of this.offspring) {
+      const allMillennialVampires = offsprings.allMillennialVampires; // 3
+      milVamps = milVamps.concat(allMillennialVampires);
+    }
+
+    return milVamps;
+
   }
 
   /** Stretch **/
@@ -78,20 +108,35 @@ class Vampire {
 const original = new Vampire("Original", 800);
 
 // Bart
-const bart = new Vampire("Bart", 800);
+const bart = new Vampire("Bart", 900);
 
 // Ansel
-const ansel = new Vampire("Ansel", 800);
+const ansel = new Vampire("Ansel", 1200);
 
 // Elgort
-const elgort = new Vampire("Elgort", 800);
+const elgort = new Vampire("Elgort", 1400);
 
 // Sarah
-const sarah = new Vampire("Sarah", 800);
+const sarah = new Vampire("Sarah", 1800);
 
 // Andrew
-const andrew = new Vampire("Andrew", 800);
+const andrew = new Vampire("Andrew", 1985);
+
+//------
+
+original.addOffspring(bart)
+original.addOffspring(ansel)
+
+ansel.addOffspring(sarah)
+ansel.addOffspring(elgort)
+
+ansel.addOffspring(andrew)
 
 //------
 module.exports = Vampire;
+
+ console.log(original.vampireWithName(andrew)); // Works!
+ console.log(original.totalDescendents); // Works!
+
+ console.log(original.allMillennialVampires); // Works!!
 
